@@ -85,7 +85,7 @@ public class Percolation {
         
         col--;
         row--;
-        return (compounds.find(row * col) == compounds.find(virtNodeTop));
+        return (compounds.find(makeIndex(row, col)) == compounds.find(virtNodeTop));
     }
 
     public int numberOfOpenSites() // number of open sites
