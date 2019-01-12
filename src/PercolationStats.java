@@ -16,21 +16,20 @@ public class PercolationStats {
 		{
 			do
 			{
-				row = StdRandom.uniform(size);
-				col = StdRandom.uniform(size);
-				if((row == size) || (col == size)) System.out.println("BINGO!");
-//				else System.out.println("row = " + row + ", col = " + col);
+				row = StdRandom.uniform(1, size + 1);
+				col = StdRandom.uniform(1, size + 1);
 			} while (perc.isOpen(row, col));
 			
 			perc.open(row, col);
 			if(perc.percolates())
 			{
-				System.out.println("The system percolates at " + i + " open sites (" + (double)i/(size*size) + ")");
+				System.out.println("The system percolates at " + perc.numberOfOpenSites() + 
+									" open sites (" + (double)perc.numberOfOpenSites()/(size*size) + ")");
 				break;
 			}
 		}
 
-		return (double)i/(size*size);
+		return (double)perc.numberOfOpenSites()/(size*size);
 	}
 	
 	public PercolationStats(int n, int T)    // perform trials independent experiments on an n-by-n grid
@@ -42,11 +41,9 @@ public class PercolationStats {
 		threshold = new double[trials];
 		for(int i = 0; i < trials; i++)
 		{
-			System.out.println("Trial #" + i);
 			Percolation perc = new Percolation(size);
 			threshold[i] = single_run(perc);
 			thres_sum += threshold[i]; 
-			perc = null;
 		}
 		
 		mean = thres_sum / trials;
@@ -75,6 +72,7 @@ public class PercolationStats {
    {
 	   return 1.96 * deviation / Math.sqrt(trials);
    }
+   
    public double confidenceLo()                  // low  endpoint of 95% confidence interval
    {
 	   return mean - five_percent();
@@ -91,7 +89,7 @@ public class PercolationStats {
 //		   throw new IllegalArgumentException("Please specify size of the field and number of trials");
 //	   
 //	   PercolationStats stats = new PercolationStats(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-	   PercolationStats stats = new PercolationStats(30, 10);
+	   PercolationStats stats = new PercolationStats(100, 10);
 	   System.out.println("mean                    = " + stats.mean());
 	   System.out.println("stddev                  = " + stats.stddev());
 	   System.out.println("95% confidence interval = [" + stats.confidenceLo() + ", "+ stats.confidenceHi() + "]");

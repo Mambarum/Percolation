@@ -29,12 +29,12 @@ public class Percolation {
 
 	private void sanity_check(int col, int row)
 	{
-		if( (row < 0)  ||
-			(row >= N) ||
-			(col < 0)  ||
-			(col >= N) ||
-			((row * col) >= sites_num))
-				throw new IllegalArgumentException("Invalid site index specified");
+		if( (row <= 0)  ||
+			(row > N) ||
+			(col <= 0)  ||
+			(col > N) ||
+			((row * col) > sites_num))
+				throw new IllegalArgumentException("Invalid site index specified: col = " + col + ", row = " + row);
 	}
 	
 	private int make_index(int row, int col)
@@ -44,7 +44,11 @@ public class Percolation {
 	
 	public void open(int row, int col)   // open site (row, col) if it is not open already
 	{
-		if(isOpen(row, col))
+		sanity_check(col, row);
+		col--;
+		row--;
+		
+		if(check_open(row, col))
 			return;
 		
 		int index = make_index(row, col);
@@ -57,29 +61,38 @@ public class Percolation {
 			compounds.union(index, virt_node_bot);
 		else
 		{
-			if(isOpen(row - 1, col))
+			if(check_open(row - 1, col))
 				compounds.union(index, make_index((row - 1), col));
 			
-			if(isOpen(row + 1, col))
+			if(check_open(row + 1, col))
 				compounds.union(index, make_index((row + 1), col));
 		}
 		
-		if((col != 0) && isOpen(row, col - 1))
+		if((col != 0) && check_open(row, col - 1))
 			compounds.union(index, make_index(row, (col - 1)));
 		
-		if((col != N - 1) && isOpen(row, col + 1))
+		if((col != N - 1) && check_open(row, col + 1))
 			compounds.union(index, make_index(row, (col + 1)));
+	}
+	
+	private boolean check_open(int row, int col)
+	{
+		return (sites[make_index(row, col)] != -1);
 	}
 	
 	public boolean isOpen(int row, int col) // is site (row, col) open?
 	{
 		sanity_check(col, row);
-		return (sites[make_index(row, col)] != -1);
+		col--;
+		row--;
+		return check_open(row, col);
 	}
 	
 	public boolean isFull(int row, int col) // is site (row, col) full?
 	{
 		sanity_check(col, row);
+		col--;
+		row--;
 		return (compounds.find(row * col) == compounds.find(virt_node_top));
 	}
 	
