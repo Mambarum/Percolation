@@ -85,11 +85,10 @@ public class PercolationStats {
    
    public static void main(String[] args)        // test client (described below)
    {
-//	   if(args.length < 2)
-//		   throw new IllegalArgumentException("Please specify size of the field and number of trials");
-//	   
-//	   PercolationStats stats = new PercolationStats(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-	   PercolationStats stats = new PercolationStats(100, 10);
+	   if(args.length < 2)
+		   throw new IllegalArgumentException("Please specify size of the field and number of trials");
+	   
+	   PercolationStats stats = new PercolationStats(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 	   System.out.println("mean                    = " + stats.mean());
 	   System.out.println("stddev                  = " + stats.stddev());
 	   System.out.println("95% confidence interval = [" + stats.confidenceLo() + ", "+ stats.confidenceHi() + "]");
