@@ -46,13 +46,13 @@ public class Percolation {
         openSitesNum++;
         sites[index] = true;
 
+        if (row == sitesNum - 1)
+            canPercolate++;
+
         if (row == 0)
             compounds.union(index, virtNodeTop);
         else if (checkOpen(row - 1, col))
             compounds.union(index, makeIndex((row - 1), col));
-
-        if (row == sitesNum - 1)
-            canPercolate++;
         
         if ((row != sitesNum - 1) && (checkOpen(row + 1, col)))
             compounds.union(index, makeIndex((row + 1), col));
