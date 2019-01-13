@@ -7,8 +7,7 @@ public class Percolation {
     private final int sitesNum;
     private int openSitesNum = 0;
     private final int virtNodeTop;
-    private final int virtNodeBot;
-//    private int canPercolate = 0;
+    private int canPercolate = 0;
 
     public Percolation(int n) // create n-by-n grid, with all sites blocked
     {
@@ -18,7 +17,6 @@ public class Percolation {
         compounds = new WeightedQuickUnionUF(n * n + 2);
 
         virtNodeTop = n * n;
-        virtNodeBot = n * n + 1;
 
         sites = new boolean[n * n];
         totalSitesNum = n * n;
@@ -54,10 +52,9 @@ public class Percolation {
             compounds.union(index, makeIndex((row - 1), col));
 
         if (row == sitesNum - 1)
-            compounds.union(index, virtNodeBot);
-        else if (checkOpen(row + 1, col))
-//            canPercolate++;
-//        if ((row != sitesNum - 1) && (checkOpen(row + 1, col)))
+            canPercolate++;
+        
+        if ((row != sitesNum - 1) && (checkOpen(row + 1, col)))
             compounds.union(index, makeIndex((row + 1), col));
 
         if ((col != 0) && checkOpen(row, col - 1))
@@ -96,8 +93,7 @@ public class Percolation {
 
     public boolean percolates() // does the system percolate?
     {
-        return compounds.connected(virtNodeBot, virtNodeTop);
-/*        if (canPercolate == 0)
+        if (canPercolate == 0)
             return false;
         
         int tmp = canPercolate;
@@ -112,6 +108,6 @@ public class Percolation {
                     break;
             }
         }
-        return false;*/
+        return false;
     }
 }
