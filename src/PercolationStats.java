@@ -1,39 +1,51 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-import java.io.FileNotFoundException;
+// >>>>>>
+/* import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.Scanner; */
+// <<<<<<
 
 public class PercolationStats {
+// !!!!!! final
     private final int size;
     private final int trials;
-    private final double[] threshold;
-    
-    private boolean randomIn = true;
-    
-    private FileReader file = null;
+    private final double mean;
+    private final double deviation;
+
+// >>>>>>
+/*    private boolean randomIn = true;
     private Scanner inFile = null;
-    private class intPairs {
+    private final String fileName = "test_data/input3.txtss";
+    private List<IntPairs> inputBuf = new ArrayList<IntPairs>();
+    
+    private class IntPairs {
         public int row;
         public int col;
-    }
-    private String fileName = "test_data/input6.txt";
-    private Vector<intPairs> input;
-
+    } */
+// <<<<<<<<
+    
     public PercolationStats(int n, int trialsIn) // perform trials independent experiments on an n-by-n grid
     {
-        if ((n == 0) && (trialsIn == 0)) {
-            if(openFile(fileName)) {
+        if ((n <= 0) || (trialsIn <= 0))
+            throw new IllegalArgumentException("Bad input parameters: size = " + n + ", trials = " + trialsIn);
+        
+        trials = trialsIn;
+        size = n;
+// >>>>>>>
+/*        if ((n == 0) && (trialsIn == 0)) {
+            try {
+                openFile(fileName);
                 System.out.println("Input is taken from " + fileName);
-                input = new Vector<intPairs>();
-                size = readFilePairs(input);
-                trials = 1;
+                size = readFilePairs(inputBuf);
+                trials = 2;
                 randomIn = false;
-            } else {
-                size = 100;
+            } catch (FileNotFoundException nfex) {
+                size = 500;
                 trials = 10;
                 System.out.println("Falling back to random input with default " + size + " size and " + trials + " trials");
             }
@@ -41,48 +53,50 @@ public class PercolationStats {
             trials = trialsIn;
             size = n;
             System.out.println("Random input with user-provided " + size + " size and " + trials + " trials");
-        }
-
-        threshold = new double[trials];
+        } */
+// <<<<<<<<
+        double[] threshold = new double[trials];
         for (int i = 0; i < trials; i++) {
             Percolation perc = new Percolation(size);
             threshold[i] = singleRun(perc);
         }
-    }
-
-    private boolean openFile(String name)
-    {
-        try {
-            file = new FileReader(name);
-            inFile = new Scanner(file);
-        } catch (FileNotFoundException nfex) {
-            System.out.println("Cannot open the file");
-            return false;
-        }
-        return true;
+        mean = StdStats.mean(threshold);
+        deviation = StdStats.stddev(threshold);
     }
     
-    private int readFilePairs(Vector<intPairs> buf)
+// >>>>>>>>
+/*    private void openFile(String name) throws FileNotFoundException
+    {
+        FileReader file = null;
+        file = new FileReader(name);
+        inFile = new Scanner(file);
+    }
+    
+    private int readFilePairs(List<IntPairs> buf)
     {
         int len = inFile.nextInt();
         
         try {
             while (true) {
-                intPairs tmp = new intPairs();
+                IntPairs tmp = new IntPairs();
                 tmp.row = inFile.nextInt();
                 tmp.col = inFile.nextInt();
                 buf.add(tmp);
             }
-        } catch (NoSuchElementException eof) {}
+        } catch (NoSuchElementException eof) {
+            // File ended
+        }
         return len;
-    }
+    } */
+// <<<<<<<<<  
     
     private double singleRun(Percolation perc) {
         int row, col;
         int i = 0;
-
-        if(randomIn) {
-            for (i = 0; i < size * size; i++) {
+// >>>>>>>>>
+//        if (randomIn) {
+// <<<<<<<<<  
+        for (i = 0; i < size * size; i++) {
                 do {
                     row = StdRandom.uniform(1, size + 1);
                     col = StdRandom.uniform(1, size + 1);
@@ -92,27 +106,29 @@ public class PercolationStats {
                 if (perc.percolates())
                     break;
             }
-        } else {
-            while (i < input.size())
+// >>>>>>>>>        
+/*      } else {
+            while (i < inputBuf.size())
             {
-                intPairs tmp = input.get(i++);
+                IntPairs tmp = inputBuf.get(i++);
     
                 perc.open(tmp.row, tmp.col);
                 if (perc.percolates())
                     break;
             }
-        }
+        } */
+// <<<<<<<<<
         return (double) perc.numberOfOpenSites() / (size * size);
     }
 
     public double mean() // sample mean of percolation threshold
     {
-        return StdStats.mean(threshold);
+        return mean;
     }
 
     public double stddev() // sample standard deviation of percolation threshold
     {
-        return StdStats.stddev(threshold);
+        return deviation;
     }
 
     private double fivePercent() {

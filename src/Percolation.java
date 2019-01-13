@@ -8,6 +8,7 @@ public class Percolation {
     private int openSitesNum = 0;
     private final int virtNodeTop;
     private final int virtNodeBot;
+//    private int canPercolate = 0;
 
     public Percolation(int n) // create n-by-n grid, with all sites blocked
     {
@@ -51,10 +52,12 @@ public class Percolation {
             compounds.union(index, virtNodeTop);
         else if (checkOpen(row - 1, col))
             compounds.union(index, makeIndex((row - 1), col));
-        
+
         if (row == sitesNum - 1)
             compounds.union(index, virtNodeBot);
         else if (checkOpen(row + 1, col))
+//            canPercolate++;
+//        if ((row != sitesNum - 1) && (checkOpen(row + 1, col)))
             compounds.union(index, makeIndex((row + 1), col));
 
         if ((col != 0) && checkOpen(row, col - 1))
@@ -83,7 +86,7 @@ public class Percolation {
         
         col--;
         row--;
-        return (compounds.find(makeIndex(row, col)) == compounds.find(virtNodeTop));
+        return (compounds.connected(makeIndex(row, col), virtNodeTop));
     }
 
     public int numberOfOpenSites() // number of open sites
@@ -93,6 +96,22 @@ public class Percolation {
 
     public boolean percolates() // does the system percolate?
     {
-        return (compounds.find(virtNodeBot) == compounds.find(virtNodeTop));
+        return compounds.connected(virtNodeBot, virtNodeTop);
+/*        if (canPercolate == 0)
+            return false;
+        
+        int tmp = canPercolate;
+        int root = compounds.find(virtNodeTop);
+        
+        for (int col = 0; col < sitesNum; col++) {
+            if (checkOpen(sitesNum - 1, col)) {
+                if (compounds.find(makeIndex(sitesNum - 1, col)) == root)
+                    return true;
+                
+                if (--tmp == 0)
+                    break;
+            }
+        }
+        return false;*/
     }
 }
