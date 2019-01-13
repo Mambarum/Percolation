@@ -13,7 +13,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
     private boolean[] sites;            // defines if the site is opened or closed
-    private final WeightedQuickUnionUF compounds;   //contains information about compounds 
+    private final WeightedQuickUnionUF compounds;   // contains information about compounds 
     private final int sitesNum;         // n - size of a field
     private final int totalSitesNum;    // n * n 
     private int openSitesNum = 0;       // number of currently opened sites
