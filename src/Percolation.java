@@ -8,7 +8,6 @@ public class Percolation {
     private int openSitesNum = 0;
     private final int virtNodeTop;
     private final int virtNodeBot;
-//    private int canPercolate = 0;
 
     public Percolation(int n) // create n-by-n grid, with all sites blocked
     {

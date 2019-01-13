@@ -2,3 +2,5 @@
 *.prefs
 *.classpath
 *.project
+test_data/
+*.zip
